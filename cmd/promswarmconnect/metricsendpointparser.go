@@ -24,13 +24,13 @@ func serviceToMetricsEndpoints(services []Service) []MetricsEndpoint {
 
 	for _, service := range services {
 		// looks up METRICS_ENDPOINT, METRICS_OVERRIDE_INSTANCE
-		foundEndpoints := processSuffix(service, "")
+		foundEndpoints := processSuffix(service, os.Getenv("PROM_CONTEXT"))
 		metricsEndpoints = append(metricsEndpoints, foundEndpoints...)
 
 		i := 2
 		for {
 			// looks up METRICS_ENDPOINT2, METRICS_OVERRIDE_INSTANCE2 etc.
-			foundEndpoints = processSuffix(service, fmt.Sprintf("%d", i))
+			foundEndpoints = processSuffix(service, fmt.Sprintf("%d", os.Getenv("PROM_CONTEXT")+i))
 			if len(foundEndpoints) == 0 {
 				break
 			}
